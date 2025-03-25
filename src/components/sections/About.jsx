@@ -5,7 +5,7 @@ export const About = () => {
         "gsap",
         "JavaScript",
         "TailwindCSS",
-        "Svelte",
+        "SCSS",
     ];
 
     const backendSkills = ["Node.js", "Python", "AWS", "MongoDB", "SQL"];
