@@ -1,5 +1,4 @@
 import { Navbar } from "../componentss/Navbar";
-import { ThemeToggle } from "../componentss/ThemeToggle";
 import { StarBackground } from "../componentss/StarBackground";
 import { HeroSection } from "../componentss/HeroSection";
 import { AboutSection } from "../componentss/AboutSection";
@@ -12,7 +11,6 @@ export const Home = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       {/* Theme Toggle */}
-      <ThemeToggle />
       {/* Background Effects */}
       <StarBackground />
 
