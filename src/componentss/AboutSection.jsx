@@ -42,10 +42,10 @@ export const AboutSection = () => {
                 Get In Touch
               </a>
               <a
-                href="https://sirasresume.s3.ap-south-1.amazonaws.com/Resume_2.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIATMY6LHK5C3H322ZS%2F20250916%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250916T010800Z&X-Amz-Expires=300&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEAkaCmFwLXNvdXRoLTEiSDBGAiEA1qK8AR961RQGBuUVKP7LsH5V5qrSAhEcgv79Z1VriEECIQC6MRLXfKwHB%2BpIRT5DKVQ9zV5il9wlb4WUOKEQoBtn3irjAgiC%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDIzMzYwMjQ5NzIxMCIM6wBAa685b2qkTT44KrcCUJrBjUyZv1fmQEN%2FDtRzG%2Fs%2B%2BXggS%2ByQw3c5po2QUIElMx7gDSsKBsbnF9BQdPEz5LMTLKarQUl67bpzK4gdTF5rA1tQq%2BhMGx7wJ5CUXvYQMnO0rrmOMYqsP2J%2FkugFBqrs31b0pc%2BOmOYKiOh%2F6dGEfYLYA9%2BQDgTXY0y2UymN%2BrGynZmjSPnt%2By5nuSUJBmvNl1MOrXc%2F5wjqyCZmaGtvAzNUK6nDzmSNcDwLVA5VTy0bamAaYkMqYepWykw5efy1%2B2qCjPbZ7MhVQ7jEe71QTqssv511oatN4nq3x5EopGBM4GsmDBxQJX1hv2RWMXcp52manjeG49hM%2F%2BGQgAX1FlYILmczqms%2FUakDJ5AeC6XGiQT%2FCialMQW6apc8sPiQeHVqM6FoyO3HrNhRS8%2B6UwiMMnww1u6ixgY6rALQ3H3f21bhnyxBgUb6EBHdaGVdAvAxRjxPqXoa0uWGXjtn%2FcVg7xKoKXaed4dAv%2FfgfHDGMOX9oywnE93YBUBlGIQNxo16YfHAOShilMsGtcKe9KeCScJQB8yYUccqN4jE7Ce3BBmOu5fZK1R9vDpFuO%2Fj%2FC1NxMdchLpqMYTYK7fFPVaf%2BB82DO4P1Gg01V6R3qbJkBcNcmWENSnQhu9KPul50dXeUxt9joZJYtHWQS8ECdb630EPkTD4KS%2B0j9ISRCHz5gRZrxlE3dmjzRQ8H0Q7U5NDwEZO2XEQU7ao8Bf3rx0h2P5olCKEdt1sVpBiELx%2FTgjOO%2BbaQ0bMfQ%2Bwxo3nNQcl30wJbTfVyDWkdYsfiZM2Lb40SrG%2FXXznDxueCHE7Uy3jimbKbpE%3D&X-Amz-Signature=9627d6c1dee748e0e0571661ee21a663b40939fcc9bbc5984a35ce8afcc93189&X-Amz-SignedHeaders=host&response-content-disposition=inline" // TODO: Add your CV link here
+              href="https://sirasresume.s3.ap-south-1.amazonaws.com/Resume_2.pdf"
                 className="px-6 py-2 rounded-full border border-primary text-primary hover:bg-primary/10 transition-colors duration-300 text-center"
               >
-                Download CV
+                Download Resume
               </a>
             </div>
           </motion.div>
