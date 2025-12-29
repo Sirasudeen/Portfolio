@@ -21,7 +21,7 @@ export const HeroSection = () => {
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto opacity-0 animate-fade-in-delay-3">
             I build backend systems, automate infrastructure, and love scaling with purpose.
-From REST to cloud-native, I turn ideas into reliable software.
+        
 
 
           </p>
