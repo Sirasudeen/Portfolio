@@ -20,10 +20,7 @@ export const HeroSection = () => {
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto opacity-0 animate-fade-in-delay-3">
-            I build backend systems, automate infrastructure, and love scaling with purpose.
-        
-
-
+            I build backend systems, automate infrastructure, and love scaling with purpose.               
           </p>
 
           <div className="pt-4 opacity-0 animate-fade-in-delay-4">
