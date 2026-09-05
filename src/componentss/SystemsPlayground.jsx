@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { ArrowUpRight, Pause, Play, RotateCcw, Zap } from "lucide-react";
+import { useSystemGame } from "../hooks/use-system-game";
+import { LIMITS } from "../lib/systemGame";
+import { SystemGamePanel } from "./SystemGamePanel";
 import "./SystemsPlayground.css";
 
 const initialNodes = [
@@ -39,9 +42,9 @@ function curve(from, to) {
 
 export const SystemsPlayground = () => {
   const [nodes, setNodes] = useState(initialNodes);
-  const [failed, setFailed] = useState(null);
   const [selected, setSelected] = useState(null);
-  const [paused, setPaused] = useState(false);
+  const [animationPaused, setAnimationPaused] = useState(false);
+  const [telemetry, setTelemetry] = useState(false);
   const [inView, setInView] = useState(true);
   const [pageVisible, setPageVisible] = useState(true);
   const [pulse, setPulse] = useState(0);
@@ -49,17 +52,72 @@ export const SystemsPlayground = () => {
   const [reducedMotion, setReducedMotion] = useState(() =>
     typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   const stageRef = useRef(null);
+  const playgroundRef = useRef(null);
   const dragRef = useRef(null);
+  const previousPlaying = useRef(false);
   const helpId = useId();
+  const panelId = useId();
+  const controller = useSystemGame(inView && pageVisible);
+  const { game, active, paused, setPaused, start, exit } = controller;
+  const playing = game.phase !== "idle";
+  const offlineNodes = [game.faults.includes("relay") ? 1 : null, game.faults.includes("compute") ? 2 : null].filter((id) => id !== null);
+  const failed = offlineNodes[0] ?? null;
+  const slow = game.faults.includes("latency");
+  const congested = playing && game.metrics.queue > 12;
+  const showDependency = playing && (selected === 2 || selected === 4 || selected === 6 || telemetry);
+  const stopped = playing ? paused || !active : animationPaused;
+  const status = game.phase === "broken" ? "Outage reproduced. You found the shared failure domain. Patch and replay below."
+    : game.phase === "patched" ? "Protected replay complete. The same incident no longer caused a sustained outage."
+    : game.phase === "patch-failed" ? "The recorded incident still caused an outage under the protected policy."
+    : game.phase === "survived" ? "Round complete. The system held. Try another approach."
+    : playing && paused ? "Simulation paused. Inspect the system or change faults, then resume."
+    : playing && (!inView || !pageVisible) ? "Simulation suspended while the playground is out of view."
+    : game.phase === "replaying" ? "Replaying your exact fault timeline with deadline-aware protection."
+    : playing && game.badFor > 0 ? "Deadline goodput is below 20%. The outage clock is running."
+    : congested ? "Connections are busy. The queue is growing."
+    : playing ? "Everything is green. Prove it wrong."
+    : sending ? "Pulse sent: input → output." : "All connected. Can you find the weak assumption?";
   // Start one-shot SVG motion on insertion, not at the SVG document's time zero.
   const beginPulse = useCallback((animation) => animation?.beginElement(), []);
   const route = findRoute(failed);
-  const running = !paused && !reducedMotion && inView && pageVisible;
+  const running = !stopped && !reducedMotion && inView && pageVisible;
+  const signalDuration = slow ? 7.2 : 4.8;
+  const signalCount = playing && game.metrics.retries > 0 ? 6 : 3;
   const routePath = `M ${nodes[0].x} ${nodes[0].y} ${route.slice(1).map((id, i) => curve(nodes[route[i]], nodes[id])).join(" ")}`;
 
   useEffect(() => {
+    if (previousPlaying.current === playing) return;
+    previousPlaying.current = playing;
+    requestAnimationFrame(() => {
+      const playground = playgroundRef.current;
+      if (!playground) return;
+      const navigation = document.querySelector(".site-nav");
+      const desktop = window.matchMedia("(min-width: 761px)").matches;
+      const navigationBottom = (navigation?.getBoundingClientRect().bottom ?? 65)
+        - (desktop && !navigation?.classList.contains("site-nav--scrolled") ? 12 : 0);
+      const target = playing && window.matchMedia("(min-width: 761px)").matches
+        ? document.querySelector(".system-game") || playground
+        : playground;
+      const offset = -(navigationBottom + 8);
+      const request = new CustomEvent("portfolio:scroll-to", {
+        detail: { target, offset, handled: false },
+      });
+      window.dispatchEvent(request);
+      if (!request.detail.handled) {
+        const top = target.getBoundingClientRect().top + window.scrollY + offset;
+        window.scrollTo({ top: Math.max(0, top), behavior: reducedMotion ? "auto" : "smooth" });
+      }
+      requestAnimationFrame(() => {
+        const correction = target.getBoundingClientRect().top + offset;
+        if (Math.abs(correction) < 1) return;
+        window.scrollBy({ top: correction, behavior: "auto" });
+      });
+    });
+  }, [playing, reducedMotion]);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting));
-    observer.observe(stageRef.current);
+    observer.observe(playgroundRef.current);
     const onVisibility = () => setPageVisible(!document.hidden);
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const onPreference = () => setReducedMotion(preference.matches);
@@ -119,17 +177,26 @@ export const SystemsPlayground = () => {
   const reset = () => {
     dragRef.current = null;
     setNodes(initialNodes);
-    setFailed(null);
     setSelected(null);
     setSending(false);
     setPulse(0);
+    setTelemetry(false);
+    setAnimationPaused(false);
+    if (playing) start();
+  };
+
+  const beginChallenge = () => {
+    setSending(false);
+    setSelected(0);
+    setTelemetry(false);
+    start();
   };
 
   return (
-    <div className={`systems-playground${failed !== null ? " systems-playground--rerouted" : ""}`} role="group" aria-label="Interactive systems playground">
+    <div ref={playgroundRef} className={`systems-playground${failed !== null ? " systems-playground--rerouted" : ""}${playing ? " systems-playground--game" : ""}${congested ? " systems-playground--congested" : ""}`} role="group" aria-label="Interactive systems playground">
       <div className="systems-eyeline">
-        <span><i /> A small experiment</span>
-        <span>01 / living systems</span>
+        <span><i /> {playing ? "A small challenge" : "A small experiment"}</span>
+        <span>{playing ? "01 / find the failure" : "01 / living systems"}</span>
       </div>
 
       <div className="systems-stage" ref={stageRef}>
@@ -140,14 +207,15 @@ export const SystemsPlayground = () => {
             <line key={i} className="systems-tick" x1="250" y1="29" x2="250" y2={i % 5 === 0 ? "36" : "32"} transform={`rotate(${i * 6} 250 230)`} />
           ))}
           {edges.map(([from, to]) => {
-            const offline = from === failed || to === failed;
+            const offline = offlineNodes.includes(from) || offlineNodes.includes(to);
             const active = route.some((id, i) => id === from && route[i + 1] === to || id === to && route[i + 1] === from);
             return <path key={`${from}-${to}`} className={`systems-link${offline ? " systems-link--offline" : active ? " systems-link--active" : ""}`} d={`M ${nodes[from].x} ${nodes[from].y} ${curve(nodes[from], nodes[to])}`} />;
           })}
           <path className={`systems-route${sending ? " systems-route--sending" : ""}`} d={routePath} />
-          {running && [0, 1, 2].map((signal) => (
+          {showDependency && [2, 4].map((id) => <path key={`dependency-${id}`} className="systems-dependency-link" d={`M ${nodes[id].x} ${nodes[id].y} Q 400 420 250 425`} />)}
+          {running && Array.from({ length: signalCount }, (_, i) => i).map((signal) => (
             <circle className="systems-signal" r={signal === 0 ? "4" : "3"} key={`${failed}-${signal}`}>
-              <animateMotion path={routePath} dur="4.8s" begin={`${signal * -1.6}s`} repeatCount="indefinite" />
+              <animateMotion path={routePath} dur={`${signalDuration}s`} begin={`${signal * -signalDuration / signalCount}s`} repeatCount="indefinite" />
             </circle>
           ))}
           {sending && !reducedMotion && inView && pageVisible && (
@@ -158,18 +226,19 @@ export const SystemsPlayground = () => {
         </svg>
 
         <div className="systems-center" aria-hidden="true">
-          <span className="systems-center-index">{failed === null ? "Order is easy." : "One relay down."}</span>
-          <span className="systems-center-title">{failed === null ? <>What if<br /><em>it breaks?</em></> : <>Still<br /><em>flowing.</em></>}</span>
-          <span className="systems-center-note">{failed === null ? "Go on. Find out. ↙" : "Resilience by design. ↗"}</span>
+          <span className="systems-center-index">{game.phase === "broken" ? "Failure reproduced." : game.patched ? "Deadline-aware design." : playing ? "Everything is green?" : "Order is easy."}</span>
+          <span className="systems-center-title">{game.phase === "broken" ? <>Shared<br /><em>fate.</em></> : game.patched ? <>Less.<br /><em>But better.</em></> : congested ? <>Still up.<br /><em>Not useful.</em></> : playing ? <>Find the<br /><em>weak link.</em></> : <>What if<br /><em>it breaks?</em></>}</span>
+          <span className="systems-center-note">{playing ? stopped ? "Paused. Take a closer look." : "Two faults. Make them count." : "Go on. Find out. ↙"}</span>
         </div>
 
         {nodes.map((node, id) => (
           <button
             key={id}
             type="button"
-            className={`systems-node${id === 0 || id === 3 ? " systems-node--terminal" : ""}${id === 3 ? " systems-node--output" : ""}${id === failed ? " systems-node--offline" : ""}${selected === id ? " systems-node--selected" : ""}`}
+            className={`systems-node${id === 0 || id === 3 ? " systems-node--terminal" : ""}${id === 3 ? " systems-node--output" : ""}${offlineNodes.includes(id) ? " systems-node--offline" : ""}${selected === id ? " systems-node--selected" : ""}`}
             style={{ left: `${node.x / 5}%`, top: `${node.y / 4.6}%` }}
-            aria-label={`${node.name}${id === failed ? ", offline" : ""}`}
+            aria-label={`${node.name}${offlineNodes.includes(id) ? ", offline" : ""}`}
+            aria-pressed={playing ? selected === id : undefined}
             aria-describedby={helpId}
             onPointerDown={(event) => startDrag(event, id)}
             onPointerMove={drag}
@@ -180,31 +249,38 @@ export const SystemsPlayground = () => {
             onClick={() => setSelected(id)}
             onFocus={() => setSelected(id)}
           >
-            <span className="systems-node-disc">{id === 0 ? <ArrowUpRight size={19} /> : id === 3 ? <span className="systems-output-mark">✳</span> : id === failed ? "×" : <span className="systems-node-dot" />}</span>
-            <span className="systems-node-label">{node.name}</span>
+            <span className="systems-node-disc">{id === 0 ? <ArrowUpRight size={19} /> : id === 3 ? (
+              <svg className="systems-output-mark" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" aria-hidden="true" focusable="false">
+                <path d="M12 2v20M2 12h20M5 5l14 14M5 19 19 5" />
+              </svg>
+            ) : offlineNodes.includes(id) ? "×" : <span className="systems-node-dot" />}</span>
+            <span className="systems-node-label">{node.name}{playing && id === 5 && game.metrics.queue > 0 ? ` · ${game.metrics.queue}` : ""}</span>
           </button>
         ))}
+        {showDependency && <button className={`systems-pool-node${selected === 6 ? " is-selected" : ""}`} type="button" aria-label="Inspect shared connection pool" aria-pressed={selected === 6} onClick={() => setSelected(6)}>pool <span>{game.metrics.pool}/{LIMITS.pool}</span></button>}
       </div>
 
       <div className="systems-controls">
-        <button className="systems-fault" type="button" aria-pressed={failed !== null} onClick={() => { setFailed((current) => current === null ? 1 : null); setSelected(null); }}>
-          <span aria-hidden="true">{failed === null ? "↯" : "↗"}</span> {failed === null ? "Break the relay" : "Restore the relay"}
+        <button className="systems-fault" type="button" aria-expanded={playing} aria-controls={panelId} onClick={() => { if (playing) { exit(); setSelected(null); } else beginChallenge(); }}>
+          {playing ? "Exit challenge" : "Try to break it"} <ArrowUpRight size={14} aria-hidden="true" />
         </button>
+        {!playing && (
         <button className="systems-send" type="button" onClick={() => { setPulse((current) => current + 1); setSending(true); }}>
           <Zap size={14} /> Send pulse
         </button>
-        <button className="systems-icon-button" type="button" onClick={() => { setPaused((current) => !current); setSending(false); }} aria-label={paused ? "Resume signal animation" : "Pause signal animation"} disabled={!!reducedMotion}>
-          {paused || reducedMotion ? <Play size={14} /> : <Pause size={14} />}
+        )}
+        <button className="systems-icon-button" type="button" onClick={() => { if (playing) setPaused(!paused); else setAnimationPaused(!animationPaused); setSending(false); }} aria-label={playing ? paused ? "Resume challenge" : "Pause challenge" : animationPaused ? "Resume signal animation" : "Pause signal animation"} disabled={playing ? !active : !!reducedMotion}>
+          {(playing ? paused : animationPaused || reducedMotion) ? <Play size={14} /> : <Pause size={14} />}
         </button>
-        <button className="systems-icon-button" type="button" onClick={reset} aria-label="Reset network"><RotateCcw size={14} /></button>
+        <button className="systems-icon-button" type="button" onClick={reset} aria-label={playing ? "Restart challenge" : "Reset network"}><RotateCcw size={14} /></button>
       </div>
 
       <div className="systems-readout" role="status" aria-live="polite" aria-atomic="true">
         <span className="systems-readout-dot" />
-        <span>{sending ? "Pulse sent: input → output." : failed === null ? "All connected. There is more than one way through." : "Relay offline. Alternate route found. Nothing lost."}</span>
+        <span>{status}</span>
       </div>
-      <p className="systems-hint" id={helpId}>Drag the nodes. Change the shape, not the outcome.<span>Keyboard: focus a node and use the arrow keys.</span></p>
-      <p className="systems-detail">{selected === null ? "A playground for the way I think. Not a production monitor." : nodes[selected].detail}</p>
+      <p className="systems-hint" id={helpId}>{playing ? "Tap to inspect. Drag to rearrange. Faults change behavior—not geometry." : "Drag the nodes. Change the shape, not the outcome."}<span>Keyboard: focus a node and use the arrow keys.</span></p>
+      {playing ? <SystemGamePanel controller={controller} selected={selected} onSelect={setSelected} telemetry={telemetry} onTelemetry={() => setTelemetry(!telemetry)} panelId={panelId} /> : <div id={panelId}><p className="systems-detail">{selected === null ? "A playground for the way I think. Not a production monitor." : nodes[selected]?.detail}</p></div>}
     </div>
   );
 };

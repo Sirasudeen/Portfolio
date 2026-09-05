@@ -26,6 +26,14 @@ export const Home = () => {
       touchMultiplier: 1.5,
     });
 
+    const onScrollRequest = (event) => {
+      const { target, offset = 0 } = event.detail || {};
+      if (!target) return;
+      event.detail.handled = true;
+      lenis.scrollTo(target, { offset, duration: 1.2 });
+    };
+    window.addEventListener("portfolio:scroll-to", onScrollRequest);
+
     let rafId;
     function raf(time) {
       lenis.raf(time);
@@ -35,6 +43,7 @@ export const Home = () => {
 
     return () => {
       cancelAnimationFrame(rafId);
+      window.removeEventListener("portfolio:scroll-to", onScrollRequest);
       lenis.destroy();
     };
   }, []);
