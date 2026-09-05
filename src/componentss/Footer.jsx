@@ -4,7 +4,7 @@ export const Footer = () => {
   return (
     <footer className="footer section-frame">
       <a className="wordmark wordmark--light" href="#hero" aria-label="siras.cloud, home">siras<span>.cloud</span></a>
-      <p>Designed and built with intention · © {new Date().getFullYear()}</p>
+      <p>Tirunelveli, India <span aria-hidden="true">↔</span> The internet<br /><span>Curiosity, made visible. © {new Date().getFullYear()}</span></p>
       <a
         href="#hero"
         className="back-to-top"

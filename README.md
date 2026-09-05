@@ -1,133 +1,39 @@
-# Build a Modern Portfolio Website with React & TailwindCSS
+# siras.cloud
 
-<div align="center">
-  <br />
-  <a href="https://youtu.be/YOUR_VIDEO_ID" target="_blank">
-    <img src="./banner.png" alt="Portfolio Website Banner">
-  </a>
-  <br />
-  <div>
-    <img src="https://img.shields.io/badge/-React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
-    <img src="https://img.shields.io/badge/-TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss" alt="Tailwind CSS" />
-    <img src="https://img.shields.io/badge/-Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
-    <img src="https://img.shields.io/badge/-Lucide Icons-FD4D4D?style=for-the-badge&logo=lucide" alt="Lucide Icons" />
-    <img src="https://img.shields.io/badge/-Radix UI-9D4EDD?style=for-the-badge&logo=data:image/svg+xml;base64..." alt="Radix UI" />
-  </div>
-  <h3 align="center">Create a Stunning Developer Portfolio with Animations, Dark Mode, and Projects Showcase</h3>
-  <div align="center">
-    Follow the full video tutorial on 
-    <a href="https://youtu.be/YOUR_VIDEO_ID" target="_blank"><b>YouTube</b></a>
-  </div>
-  <br />
-</div>
+A personal software-engineering portfolio built around curiosity, clear systems, and useful experiments.
 
-## 📋 Table of Contents
+## The experience
 
-1. [Introduction](#-introduction)
-2. [Tech Stack](#-tech-stack)
-3. [Features](#-features)
-4. [Quick Start](#-quick-start)
-5. [Screenshots](#-screenshots)
-6. [Deployment](#-deployment)
+- **Living systems:** a draggable hero network with real graph routing, relay failure, pulse sending, keyboard controls, and reduced-motion support.
+- **Selected work:** an asymmetric project gallery with full-interface screenshots and expandable engineering notes.
+- **About:** a personal introduction and current areas of exploration.
+- **Approach:** keyboard-accessible principle tabs with custom SVG illustrations.
+- **Contact:** direct email, clipboard copying with error feedback, and social links.
 
----
+Native scrolling and links are preserved. The mobile menu uses a native modal dialog, and motion is reduced when requested. The hero network stops animating while offscreen or in a hidden tab.
 
-## 🚀 Introduction
+## Development
 
-In this tutorial, you'll learn how to build a modern portfolio website using **React**, **TailwindCSS**, **Vite**, and **Lucide Icons**. From dark mode support to responsive animations and deployable project showcases, this video walks you through every step—perfect for developers looking to level up their frontend skills or apply for jobs.
+Requires a supported Node.js release and npm.
 
-🎥 Watch the full tutorial: [YouTube](https://youtu.be/YOUR_VIDEO_ID)
+- `npm install` — install dependencies.
+- `npm run dev` — start the Vite development server.
+- `npm run build` — create the production build in `dist`.
+- `npm run preview` — preview that production build locally.
 
----
+React 18, Vite, Framer Motion, Lucide icons, and custom responsive CSS. Tailwind remains available for the shared UI components.
 
-## ⚙️ Tech Stack
+## Editing
 
-* **React** – Component-based UI development
-* **Vite** – Lightning-fast build tool
-* **TailwindCSS** – Utility-first CSS for styling
-* **Lucide Icons** – Clean and beautiful icon pack
-* **Radix UI** – Accessible component primitives
-* **TypeScript (optional)** – Type safety and tooling
-* **GitHub & Vercel** – Deployment
+- Section order and reduced-motion configuration: [src/pages/Home.jsx](src/pages/Home.jsx).
+- Project descriptions, screenshots, and destinations: [src/componentss/ProjectsSection.jsx](src/componentss/ProjectsSection.jsx).
+- Network interaction: [src/componentss/SystemsPlayground.jsx](src/componentss/SystemsPlayground.jsx).
+- Global design system: [src/index.css](src/index.css).
+- Navigation styles: [src/componentss/Navigation.css](src/componentss/Navigation.css).
+- Search and social metadata: [index.html](index.html).
 
----
+## Deployment
 
-## ⚡️ Features
+Build with `npm run build` and serve `dist` using a static host. Configure SPA fallback to the generated index document for client-side routing. The canonical URL, social image URLs, robots file, and sitemap currently target **https://siras.cloud/**.
 
-* 🌑 **Light/Dark Mode Toggle**
-  Save theme preference in local storage with beautiful transitions
-
-* 💫 **Animated Backgrounds**
-  Stars, meteors, scroll effects, and glowing UI elements
-
-* 📱 **Responsive Navigation**
-  Desktop and mobile menus with glassmorphism
-
-* 👨‍💻 **Hero & About Sections**
-  Showcase who you are with smooth intro animations and buttons
-
-* 📊 **Skills Grid**
-  Filterable progress bars and categories with animated width
-
-* 🖼️ **Projects Showcase**
-  Display screenshots, tech stacks, and GitHub/demo links
-
-* 📩 **Contact Section**
-  Social icons + responsive contact form with toast notifications
-
-* 🚀 **One-Click Deployment**
-  Easily host your site with Vercel and GitHub
-
----
-
-## 👌 Quick Start
-
-### Prerequisites
-
-* [Node.js](https://nodejs.org/)
-* [Git](https://git-scm.com/)
-
-### Clone and Run
-
-```bash
-git clone https://github.com/yourusername/react-tailwind-portfolio.git
-cd react-tailwind-portfolio
-npm install
-npm run dev
-```
-
-Your app will be available at: [http://localhost:5173](http://localhost:5173)
-
----
-
-## 🖼️ Screenshots
-
-> 📸 Add screenshots of your Hero section, Projects grid, and Contact form here to show off your site.
-
----
-
-## ☁️ Deployment
-
-### Deploy on Vercel
-
-1. Push your code to GitHub
-2. Go to [vercel.com](https://vercel.com)
-3. Import your repository
-4. Click **Deploy**
-
-Your live website will be hosted on a custom subdomain (e.g. `https://your-name.vercel.app`)
-
----
-
-## 🔗 Useful Links
-
-* [React Documentation](https://reactjs.org/)
-* [Tailwind CSS Docs](https://tailwindcss.com/)
-* [Lucide Icons](https://lucide.dev/)
-* [Radix UI](https://www.radix-ui.com/)
-* [Vite](https://vitejs.dev/)
-* [Vercel](https://vercel.com/)
-
----
-
-Let me know if you'd like me to generate a version with your actual GitHub repo, YouTube URL, or a banner image suggestion!
+Before publishing, verify the external demo destinations and email/social links. Browser layout checks do not prove that third-party services are available.
