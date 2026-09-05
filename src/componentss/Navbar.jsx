@@ -1,92 +1,56 @@
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
-import { ThemeToggle } from "../componentss/ThemeToggle";
 
 const navItems = [
-  { name: "Home", href: "#hero" },
   { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
-  { name: "Projects", href: "#projects" },
-  { name: "Contact", href: "#contact" },
+  { name: "Work", href: "#projects" },
+  { name: "Approach", href: "#skills" },
 ];
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 24, mass: 0.25 });
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10); // 🔧 fixed from screenY to scrollY
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <nav
-      className={cn(
-        "fixed w-full z-40 transition-all duration-300",
-        isScrolled ? "py-3 bg-background/80 backdrop-blur-md shadow-xs" : "py-5"
-      )}
-    >
-      <div className="container flex items-center justify-between">
-        {/* Logo */}
-        <a
-          className="text-xl font-bold text-primary flex items-center"
-          href="#hero"
-        >
-          <span className="relative z-10">
-            <span className="text-glow text-foreground"> Siras </span>.dev
-          </span>
+    <nav className={cn("site-nav", isScrolled && "site-nav--scrolled")}>
+      <motion.div className="scroll-progress" style={{ scaleX: progress }} />
+      <div className="nav-inner">
+        <a className="wordmark" href="#hero" aria-label="siras.cloud, home">
+          siras<span>.cloud</span>
         </a>
 
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center space-x-8">
-          {/* Theme toggle left to Home */}
-          <ThemeToggle />
-          {navItems.map((item, key) => (
-            <a
-              key={key}
-              href={item.href}
-              className="text-foreground/80 hover:text-primary transition-colors duration-300"
-            >
-              {item.name}
-            </a>
+        <div className="desktop-nav">
+          {navItems.map((item) => (
+            <a key={item.name} href={item.href}>{item.name}</a>
           ))}
+          <a className="nav-cta" href="#contact">
+            Say hello <ArrowUpRight size={15} aria-hidden="true" />
+          </a>
         </div>
 
-        {/* Mobile - Theme toggle left to burger */}
-        <div className="md:hidden flex items-center space-x-3">
-          <ThemeToggle />
-          <button
-            onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="p-2 text-foreground z-50"
-            aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-
-        {/* Mobile nav menu */}
-        <div
-          className={cn(
-            "fixed inset-0 bg-background/95 backdrop-blur-md z-40 flex flex-col items-center justify-center",
-            "transition-all duration-300 md:hidden",
-            isMenuOpen
-              ? "opacity-100 pointer-events-auto"
-              : "opacity-0 pointer-events-none"
-          )}
+        <button
+          onClick={() => setIsMenuOpen((open) => !open)}
+          className="menu-button"
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isMenuOpen}
         >
-          <div className="flex flex-col space-y-8 text-xl items-center">
-            {navItems.map((item, key) => (
-              <a
-                key={key}
-                href={item.href}
-                className="text-foreground/80 hover:text-primary transition-colors duration-300"
-                onClick={() => setIsMenuOpen(false)}
-              >
+          {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+
+        <div className={cn("mobile-nav", isMenuOpen && "mobile-nav--open")}>
+          <div>
+            {[...navItems, { name: "Contact", href: "#contact" }].map((item) => (
+              <a key={item.name} href={item.href} onClick={() => setIsMenuOpen(false)}>
                 {item.name}
               </a>
             ))}

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#171816" stroke-opacity=".055"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#f3f0e8"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <circle cx="1035" cy="96" r="170" fill="none" stroke="#cbc7bd"/>
+  <circle cx="865" cy="96" r="9" fill="#f05a3c"/>
+
+  <text x="72" y="78" fill="#171816" font-family="Helvetica, Arial, sans-serif" font-size="27" font-weight="700">siras<tspan fill="#f05a3c">.cloud</tspan></text>
+  <circle cx="78" cy="143" r="6" fill="#f05a3c"/>
+  <text x="98" y="149" fill="#686962" font-family="Courier New, monospace" font-size="14">SOFTWARE DEVELOPMENT ENGINEER</text>
+
+  <text x="72" y="285" fill="#171816" font-family="Helvetica, Arial, sans-serif" font-size="92" font-weight="700">Siras loves</text>
+  <text x="72" y="380" fill="#f05a3c" font-family="Georgia, serif" font-size="92" font-style="italic">to build systems.</text>
+  <text x="76" y="446" fill="#686962" font-family="Helvetica, Arial, sans-serif" font-size="23">Problem solving · Scale · Reliability</text>
+
+  <rect x="75" y="509" width="454" height="2" fill="#171816"/>
+  <text x="75" y="546" fill="#171816" font-family="Courier New, monospace" font-size="14">CLEAR THINKING. DEPENDABLE SOFTWARE.</text>
+
+  <rect x="832" y="385" width="295" height="148" rx="6" fill="#b9ed65"/>
+  <g transform="rotate(2 962 445)">
+    <rect x="816" y="367" width="295" height="148" rx="6" fill="#1b211e" stroke="#171816"/>
+    <circle cx="838" cy="389" r="4" fill="#f05a3c"/>
+    <circle cx="852" cy="389" r="4" fill="#59615b"/>
+    <circle cx="866" cy="389" r="4" fill="#59615b"/>
+    <text x="1080" y="393" text-anchor="end" fill="#9da39d" font-family="Courier New, monospace" font-size="10">focus.json</text>
+    <line x1="816" y1="405" x2="1111" y2="405" stroke="#3e4640"/>
+    <text x="840" y="438" fill="#d9dfd6" font-family="Courier New, monospace" font-size="13">"approach": "systems thinking"</text>
+    <text x="840" y="466" fill="#b9ed65" font-family="Courier New, monospace" font-size="13">"values": ["clarity", "scale"]</text>
+    <circle cx="841" cy="493" r="4" fill="#b9ed65"/>
+    <text x="853" y="497" fill="#b9ed65" font-family="Courier New, monospace" font-size="10">building at Zoho</text>
+  </g>
+</svg>
