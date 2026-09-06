@@ -24,7 +24,7 @@ const projects = [
     description: "Look closer at what your skin is doing.",
     idea: "A dermatology-focused AI assistant exploring what happens when retrieval and a language model are built around a specific domain.",
     focus: "Combines hybrid search with a domain model to make responses more relevant. An AI exploration, not a substitute for professional medical advice.",
-    image: "/projects/dermai-redesign.png", width: 2560, height: 1520, tags: ["AI", "Hybrid search", "PostgreSQL", "Node.js"],
+    image: "/projects/dermai-redesign.png", width: 2902, height: 1690, tags: ["AI", "Hybrid search", "PostgreSQL", "Node.js"],
     demoUrl: "https://derm-ai.siras.cloud",
   },
   {
