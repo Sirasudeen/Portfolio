@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -78,7 +78,7 @@ export const SkillsSection = () => {
                   <h3>{principle.title}</h3>
                   <p>{principle.description}</p>
                   <ol>
-                    {principle.steps.map(step => <li key={step}>{step}</li>)}
+                    {principle.steps.map(step => <li key={step}><ArrowRight size={12} aria-hidden="true" />{step}</li>)}
                   </ol>
                 </div>
               </motion.div>

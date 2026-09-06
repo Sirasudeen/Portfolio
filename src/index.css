@@ -175,17 +175,18 @@ main section[id] { scroll-margin-top: 88px; }
 .approach-explanation h3 { margin: 0; font-size: 24px; font-weight: 500; letter-spacing: -0.03em; }
 .approach-explanation p { margin: 14px 0 25px; font-size: 14px; line-height: 1.8; color: #b8c0b9; }
 .approach-explanation ol { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
-.approach-explanation li { display: inline-flex; align-items: center; font: 9px "DM Mono", monospace; text-transform: uppercase; }
-.approach-explanation li + li::before { content: "→"; margin-inline: 6px 14px; color: var(--green); }
+.approach-explanation li { display: inline-flex; align-items: center; gap: 6px; font: 9px "DM Mono", monospace; text-transform: uppercase; }
+.approach-explanation li + li { margin-left: 8px; }
+.approach-explanation li svg { color: var(--green); }
 
 /* The closing spread is the call to action. */
 .contact { background: var(--green); }
 .contact .section-kicker { border-color: #91bb4e; }
 .contact .section-kicker > span:first-child { color: var(--ink); }
-.contact .kicker-aside { color: #425a28; }
+.contact .kicker-aside { display: inline-flex; align-items: center; gap: 5px; color: #425a28; }
 .contact-intro { display: flex; align-items: center; justify-content: space-between; }
 .contact-intro > p { margin: 0; font-size: 17px; line-height: 1.6; letter-spacing: -0.015em; }
-.contact-asterisk { font: 90px/1 "DM Sans", sans-serif; }
+.contact-asterisk { width: 90px; height: 90px; color: var(--ink); }
 .contact-invitation { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: 36px 0 50px; margin-bottom: 40px; border-bottom: 1px solid #91bb4e; transition: border-color 300ms var(--ease); }
 .contact-invitation:hover { border-color: var(--ink); }
 .contact-invitation h2 { margin: 0; font-size: clamp(90px, 17.7vw, 254px); font-weight: 500; letter-spacing: -0.075em; line-height: 1; white-space: nowrap; transition: transform 450ms var(--ease); }
@@ -278,7 +279,7 @@ main section[id] { scroll-margin-top: 88px; }
   .approach-explanation { min-height: 250px; }
   .approach-explanation h3 { font-size: 22px; }
   .contact-intro > p { font-size: 14px; }
-  .contact-asterisk { font-size: 60px; }
+  .contact-asterisk { width: 60px; height: 60px; }
   .contact-invitation { gap: 14px; padding-block: 34px; margin-bottom: 28px; }
   .contact-invitation h2 { font-size: clamp(70px, 18vw, 136px); }
   .contact-invitation-arrow { width: 52px; height: 52px; }

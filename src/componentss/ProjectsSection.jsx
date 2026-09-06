@@ -66,7 +66,7 @@ const ProjectItem = ({ project, index }) => {
           height={project.height}
         />
         <span className="project-art-caption">{project.type}</span>
-        <span className="project-art-mark" aria-hidden="true">↗</span>
+        <ArrowUpRight className="project-art-mark" size={24} aria-hidden="true" />
       </div>
       <div className="project-information">
         <div className="project-title-row">

@@ -1,4 +1,4 @@
-import { ArrowUpRight, Check, Copy } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, Asterisk, Check, Copy } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const email = "Sirasudeenp@gmail.com";
@@ -20,8 +20,8 @@ export const ContactSection = () => {
   return (
     <section id="contact" className="contact section-pad">
       <div className="section-frame">
-        <div className="section-kicker"><span>04</span><p>Good things start with a conversation</p><span className="kicker-aside">Your move ↙</span></div>
-        <div className="contact-intro"><p>Have a curious problem,<br />a half-formed idea, or just a hello?</p><span className="contact-asterisk" aria-hidden="true">✳</span></div>
+        <div className="section-kicker"><span>04</span><p>Good things start with a conversation</p><span className="kicker-aside">Your move <ArrowDownLeft size={12} aria-hidden="true" /></span></div>
+        <div className="contact-intro"><p>Have a curious problem,<br />a half-formed idea, or just a hello?</p><Asterisk className="contact-asterisk" aria-hidden="true" /></div>
         <a className="contact-invitation" href={`mailto:${email}`}><h2>Let&apos;s <em>talk.</em></h2><span className="contact-invitation-arrow"><ArrowUpRight aria-hidden="true" /></span></a>
         <div className="contact-bottom">
           <div className="contact-address"><span className="small-label">Start here</span><div><a href={`mailto:${email}`}>{email}</a><button type="button" className="copy-email" onClick={copyEmail} aria-label="Copy email address">{copyState === "copied" ? <Check size={17} /> : <Copy size={17} />}</button></div><span className="copy-feedback" role="status">{copyState === "copied" ? "Copied. See you in the inbox." : copyState === "failed" ? "Could not copy. Select the email above instead." : "No forms. No friction. Just a conversation."}</span></div>

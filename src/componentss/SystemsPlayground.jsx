@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { ArrowUpRight, Pause, Play, RotateCcw, Zap } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, Pause, Play, RotateCcw, X, Zap } from "lucide-react";
 import { useSystemGame } from "../hooks/use-system-game";
 import { LIMITS } from "../lib/systemGame";
 import { SystemGamePanel } from "./SystemGamePanel";
@@ -76,7 +76,7 @@ export const SystemsPlayground = () => {
     : playing && game.badFor > 0 ? "Deadline goodput is below 20%. The outage clock is running."
     : congested ? "Connections are busy. The queue is growing."
     : playing ? "Everything is green. Prove it wrong."
-    : sending ? "Pulse sent: input → output." : "All connected. Can you find the weak assumption?";
+    : sending ? "Pulse sent: input to output." : "All connected. Can you find the weak assumption?";
   // Start one-shot SVG motion on insertion, not at the SVG document's time zero.
   const beginPulse = useCallback((animation) => animation?.beginElement(), []);
   const route = findRoute(failed);
@@ -228,7 +228,7 @@ export const SystemsPlayground = () => {
         <div className="systems-center" aria-hidden="true">
           <span className="systems-center-index">{game.phase === "broken" ? "Failure reproduced." : game.patched ? "Deadline-aware design." : playing ? "Everything is green?" : "Order is easy."}</span>
           <span className="systems-center-title">{game.phase === "broken" ? <>Shared<br /><em>fate.</em></> : game.patched ? <>Less.<br /><em>But better.</em></> : congested ? <>Still up.<br /><em>Not useful.</em></> : playing ? <>Find the<br /><em>weak link.</em></> : <>What if<br /><em>it breaks?</em></>}</span>
-          <span className="systems-center-note">{playing ? stopped ? "Paused. Take a closer look." : "Two faults. Make them count." : "Go on. Find out. ↙"}</span>
+          <span className="systems-center-note">{playing ? stopped ? "Paused. Take a closer look." : "Two faults. Make them count." : <>Go on. Find out. <ArrowDownLeft size={11} aria-hidden="true" /></>}</span>
         </div>
 
         {nodes.map((node, id) => (
@@ -253,7 +253,7 @@ export const SystemsPlayground = () => {
               <svg className="systems-output-mark" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" aria-hidden="true" focusable="false">
                 <path d="M12 2v20M2 12h20M5 5l14 14M5 19 19 5" />
               </svg>
-            ) : offlineNodes.includes(id) ? "×" : <span className="systems-node-dot" />}</span>
+            ) : offlineNodes.includes(id) ? <X size={22} aria-hidden="true" /> : <span className="systems-node-dot" />}</span>
             <span className="systems-node-label">{node.name}{playing && id === 5 && game.metrics.queue > 0 ? ` · ${game.metrics.queue}` : ""}</span>
           </button>
         ))}
