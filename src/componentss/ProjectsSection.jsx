@@ -20,11 +20,12 @@ const projects = [
     demoUrl: "https://zaplink.siras.dev", githubUrl: "https://github.com/Sirasudeen/zaplink",
   },
   {
-    title: "Derm AI", type: "Domain-specific AI", tone: "peach",
-    description: "Better context. More relevant answers.",
+    title: "DermAI", type: "Domain-specific AI", tone: "peach",
+    description: "Look closer at what your skin is doing.",
     idea: "A dermatology-focused AI assistant exploring what happens when retrieval and a language model are built around a specific domain.",
     focus: "Combines hybrid search with a domain model to make responses more relevant. An AI exploration, not a substitute for professional medical advice.",
-    image: "/projects/project5.png", width: 1920, height: 948, tags: ["AI", "Hybrid search", "PostgreSQL", "Node.js"],
+    image: "/projects/dermai-redesign.png", width: 2560, height: 1520, tags: ["AI", "Hybrid search", "PostgreSQL", "Node.js"],
+    demoUrl: "https://derm-ai.siras.cloud",
   },
   {
     title: "Zara AI", type: "Context-aware assistant", tone: "blue",
